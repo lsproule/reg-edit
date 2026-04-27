@@ -1,0 +1,37 @@
+==============================================================================
+REG-EDIT                                                         *reg-edit*
+
+Edit registers from a temporary buffer and write them back with |:write|.
+
+SETUP                                                            *reg-edit.setup*
+
+>
+  require("reg-edit").setup({
+    command_name = "RegEdit",
+    keys = {
+      open = "<leader>re",
+      clear = "<leader>c",
+    },
+  })
+<
+
+`keys.open` creates a global normal-mode mapping to open the editor.
+Set it to `false` to disable it.
+
+`keys.clear` creates a buffer-local normal-mode mapping inside the RegEdit
+buffer to clear the content section of register lines.
+
+USAGE                                                            *reg-edit.usage*
+
+1. Run |:RegEdit| (or use your open mapping).
+2. Edit values in the `Content` column.
+3. Run |:write| to save writable registers and close the editor window.
+
+Read-only registers (`:`, `.`, `%`, `#`) are displayed but skipped on write.
+
+COMMANDS                                                         *:RegEdit*
+
+:RegEdit
+        Open the register editor buffer in a new tab.
+
+vim:tw=78:ts=8:ft=help:norl:

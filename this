@@ -1,0 +1,29 @@
+Type Name Content
+  c  ""   reg
+  l  "0       
+  l  "1   ^J
+  l  "2   ^J
+  l  "3   ^J
+  l  "4   ^J
+  c  "5       if reg_content == "" then^J      print("Register '" .. reg_name .. "' is empty.")^J      return^J    end
+  l  "6       local reg_content = vim.fn.getreg(reg_name)^J
+  c  "7       if reg_name == "" then^J      print("No register name provided.")^J      return^J    end
+  l  "8       vim.api.nvim_buf_set_option(buf, 'modifiable', true)^J
+  c  "9   M.create_command = function(name, callback)^J  vim.api.nvim_create_user_command(name, callback, {})^Jend
+  c  "a   ^[la^[a"<80>kb)^[ji<80>kb<80>kb<80>kb<80>kb^[oputs " <80>kbhola ^[oend<80>kb<80>kb<80>kbend^[kl$a<80>kb"^[jhhi<80>kb^[koretur<80>kb<80>kburn^[:w^Mjjjjjjjjjjjjob.hola_mundo^[:w^M\^@^Ij^@iru<80>kr^M<80><fd>,<80><fd>.llkkkkk
+  c  "d   No message provided
+  c  "e   @f<80><fd>5ll
+  c  "f   f{<80><fd>5i^M^I^[
+  c  "h   ^[hhhhhhhhhhdwdwkkk<80><fd>L<80><fd>L<80><fd>L<80><fd>L<80><fd>L<80><fd>L<80><fd>L<80><fd>L<80><fd>L<80><fd>L<80><fd>L<80><fd>L<80><fd>L<80><fd>L<80><fd>LllliDestination^[jjjjjjjjjhiDestination^[jjjjjjjllllllllllllllllliD
+  c  "i   ^C^Ciqman dylsy<80>kb<80>kb<80>kblsym<80>kb<80>kb<80>kb<80>kb<80>kbls<80>kbyus<80>kb<80>kbsym<80>kb<80>kb<80>kb<80>kb<80>kb<80>ku^MGq<80>ku<80>ku<80><fc>^DCman dy<80>kblsym^M<80><fd>L^M^Mkji^M^M^M^M^M^M^M^M<80><fd>K<80>
+  c  "j   o^C^Ci^C<80>kb^C<80><fd>L<80><fd>L<80><fd>L<80><fd>K<80><fd>K<80><fd>K<80><fd>K<80><fd>K<80><fd>K<80><fd>K<80><fd>K<80><fd>K<80><fd>K<80><fd>K<80><fd>K<80><fd>K<80><fd>K<80><fd>K<80><fd>K<80><fd>K<80><fd>K<80><fd>K<80>
+  c  "k   kkkk:q^Mjjj<80><fc>^DJ:q^Mkkk<80><fc>^DLkkkkkk<80><fd>,<80><fd>.jhhhdkujddkores << <80><fc>^DA^[:w^Mjj thii<80>kb^[<80><fd>,<80><fd>.klllh^VjjI#^[:w^M pkkkkddkobinding.irb^[:w^M<80><fc>^DJiexit^M<80>ku^M<80>ku<80>ku<80>ku
+  c  "l   kko
+  c  "o   kkko^[jjji^I^[kqdc^Mdq<80>ku.versions^Mq<80>kup<80>kb[0]^Mq<80>ku.rei<80>kb<80>kb<80>kb<80>kb<80>kl<80>kl<80>kl<80>kl<80>kl<80>kl<80>kl<80>kl<80>kl<80>kl<80>kl<80>kl<80>kl<80>kl<80>kl<80>kl<80>klv - ^M<80>ku<80>kl<80>kl
+  c  "q   i<80><fd>L<80><fd>L<80><fd>,<80><fd>.kk0jljkkllllkli//^[li<80>kb<80>kb#^[oRails.logger.info (<80>kb<80>kb("system <80><fc>^DA^[:w^M<80><fc>^DJiexit^M<80>ku^M<80>ku<80>ku^M<80><fd>K<80><fd>K<80><fd>K<80><fd>K<80><fd>K<80>
+  c  "u   ^C^C
+  l  "w   $a,<80>kb<80>kb^[^[j^J
+  c  "-   reg
+  c  "*   new way to set buf option neovim
+  c  "+     },^J  {^J    dir = "/home/lucas/plugins/reg-edit",^J    event = "VimEnter",^J    name = "reg-edit",^J    lazy = false,^J    config = function()^J    end,^J  },
+  c  "/   Action

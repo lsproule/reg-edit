@@ -116,7 +116,11 @@ end
 M.create_temp_window = function(buf)
   vim.cmd.tabnew()
   local win = vim.api.nvim_get_current_win()
+  local empty_buf = vim.api.nvim_get_current_buf()
   vim.api.nvim_win_set_buf(win, buf)
+  if empty_buf ~= buf and vim.api.nvim_buf_is_valid(empty_buf) then
+    vim.api.nvim_buf_delete(empty_buf, { force = true })
+  end
   return win
 end
 
@@ -138,6 +142,7 @@ M.load_register_output = function(buf)
 
   vim.api.nvim_buf_set_lines(buf, 0, -1, false, lines)
   vim.api.nvim_buf_set_var(buf, "regedit_line_map", line_map)
+  vim.api.nvim_buf_set_var(buf, "regedit_original_lines", lines)
 end
 
 M.clear_buffer_entries = function(buf)
@@ -153,22 +158,48 @@ M.clear_buffer_entries = function(buf)
   vim.api.nvim_buf_set_lines(buf, 0, -1, false, lines)
 end
 
-M.write_buffer_to_registers = function(buf)
+M.sync_unnamed_from_yank = function()
+  vim.fn.setreg("\"", vim.fn.getreg("0"), vim.fn.getregtype("0"))
+end
+
+M.write_buffer_to_registers = function(buf, sync_unnamed)
   local lines = vim.api.nvim_buf_get_lines(buf, 0, -1, false)
   local ok, line_map = pcall(vim.api.nvim_buf_get_var, buf, "regedit_line_map")
   if not ok then
     line_map = {}
   end
+  local ok2, original_lines = pcall(vim.api.nvim_buf_get_var, buf, "regedit_original_lines")
+  if not ok2 then
+    original_lines = {}
+  end
+
+  local unnamed_entry = nil
+  local unnamed_modified = false
 
   for idx, line in ipairs(lines) do
     local mapped = line_map[tostring(idx)]
     if mapped and is_writable_register(mapped.reg_name) then
-      vim.fn.setreg(
-        mapped.reg_name,
-        encode_register_content(extract_content_from_line(line, mapped.prefix)),
-        to_setreg_type(mapped.reg_type)
-      )
+      if mapped.reg_name == "\"" then
+        unnamed_entry = { line = line, mapped = mapped }
+        unnamed_modified = line ~= original_lines[idx]
+      else
+        vim.fn.setreg(
+          mapped.reg_name,
+          encode_register_content(extract_content_from_line(line, mapped.prefix)),
+          to_setreg_type(mapped.reg_type)
+        )
+      end
     end
+  end
+
+  if unnamed_modified and unnamed_entry then
+    vim.fn.setreg(
+      "\"",
+      encode_register_content(extract_content_from_line(unnamed_entry.line, unnamed_entry.mapped.prefix)),
+      to_setreg_type(unnamed_entry.mapped.reg_type)
+    )
+  elseif sync_unnamed then
+    M.sync_unnamed_from_yank()
   end
 
   vim.api.nvim_set_option_value("modified", false, { buf = buf })
@@ -189,6 +220,10 @@ M.setup = function(opts)
     open_map = "<leader>re"
   end
   local clear_map = keys.clear or ((opts.prefix or "<leader>") .. "c")
+  local sync_unnamed = opts.sync_unnamed
+  if sync_unnamed == nil then
+    sync_unnamed = true
+  end
 
   vim.api.nvim_create_user_command(command_name, function()
     local buf = M.create_temp_buffer()
@@ -206,7 +241,7 @@ M.setup = function(opts)
     vim.api.nvim_create_autocmd("BufWriteCmd", {
       buffer = buf,
       callback = function()
-        M.write_buffer_to_registers(buf)
+        M.write_buffer_to_registers(buf, sync_unnamed)
       end,
     })
   end, { force = true })
